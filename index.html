@@ -1,0 +1,854 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noor's Birthday Surprise ❤️</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: radial-gradient(circle at top, #49206d, #14001e 75%);
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+h1 {
+    color: #ffd5f0;
+    text-shadow: 0 0 20px #ff39b9;
+    font-size: clamp(28px, 7vw, 48px);
+    margin: 25px 10px;
+}
+
+.subtitle {
+    color: #fbd7ff;
+    margin: 12px;
+    font-size: 17px;
+}
+
+.screen {
+    display: none;
+    min-height: 85vh;
+    padding: 20px 12px 45px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.screen.active {
+    display: flex;
+    animation: appear 0.8s ease;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.date {
+    color: #ffe28b;
+    font-size: 20px;
+    margin: 12px;
+    font-weight: bold;
+}
+
+/* 3D Cake */
+
+.cake-scene {
+    perspective: 900px;
+    width: 310px;
+    height: 290px;
+    position: relative;
+    margin: 20px auto;
+}
+
+.cake {
+    position: absolute;
+    width: 250px;
+    height: 120px;
+    bottom: 25px;
+    left: 30px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: 1s;
+}
+
+.cake-base {
+    position: absolute;
+    width: 250px;
+    height: 100px;
+    bottom: 0;
+    background: linear-gradient(90deg, #a82465, #ff72b7, #ad2869);
+    border-radius: 12px 12px 28px 28px;
+    box-shadow: 0 18px 25px #0008;
+}
+
+.cake-top {
+    position: absolute;
+    width: 250px;
+    height: 55px;
+    bottom: 80px;
+    background: radial-gradient(ellipse, #ffb7dc, #f65ba9);
+    border-radius: 50%;
+    border: 4px solid #ffc9e7;
+}
+
+.icing {
+    position: absolute;
+    bottom: 55px;
+    width: 250px;
+    height: 42px;
+    background: #ff9bce;
+    border-radius: 0 0 20px 20px;
+}
+
+.icing::after {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 22px;
+    height: 28px;
+    border-radius: 0 0 15px 15px;
+    background: #ffb3db;
+    box-shadow:
+      48px 0 #ffb3db,
+      96px 0 #ffb3db,
+      144px 0 #ffb3db,
+      192px 0 #ffb3db;
+}
+
+.candle {
+    position: absolute;
+    bottom: 125px;
+    width: 13px;
+    height: 58px;
+    background: repeating-linear-gradient(
+        45deg, #fff 0 6px, #ff43a2 6px 12px
+    );
+    border-radius: 4px;
+    z-index: 5;
+    cursor: pointer;
+}
+
+.candle:nth-child(1) { left: 49px; }
+.candle:nth-child(2) { left: 94px; }
+.candle:nth-child(3) { left: 139px; }
+.candle:nth-child(4) { left: 184px; }
+.candle:nth-child(5) { left: 229px; }
+
+.flame {
+    position: absolute;
+    width: 16px;
+    height: 25px;
+    background: radial-gradient(ellipse at bottom, #fff, #ffdc30, #ff6500);
+    border-radius: 50% 50% 45% 45%;
+    top: -28px;
+    left: -2px;
+    box-shadow: 0 0 20px #ffb000;
+    animation: flicker 0.5s infinite alternate;
+    cursor: pointer;
+}
+
+@keyframes flicker {
+    from { transform: rotate(-8deg) scale(1); }
+    to { transform: rotate(8deg) scale(1.12); }
+}
+
+.candle.off .flame {
+    display: none;
+}
+
+.cake-cut {
+    transform: translateX(-35px);
+}
+
+.cake-cut .cake-base::after {
+    content: "";
+    position: absolute;
+    right: -28px;
+    top: 0;
+    width: 45px;
+    height: 100%;
+    background: #ffc3e2;
+    clip-path: polygon(0 0, 100% 20%, 0 45%, 100% 70%, 0 100%);
+}
+
+.slice {
+    position: absolute;
+    width: 70px;
+    height: 80px;
+    background: linear-gradient(90deg, #ff8dc5, #ffc2e2);
+    border: 3px solid #ffd4ec;
+    right: -5px;
+    bottom: 0;
+    border-radius: 10px;
+    opacity: 0;
+    transform: translateX(0) rotate(0);
+    transition: 1s;
+}
+
+.cake-cut .slice {
+    opacity: 1;
+    transform: translateX(85px) rotate(15deg);
+}
+
+.cake-instruction {
+    color: #ffe4f7;
+    font-size: 15px;
+    margin: 12px;
+}
+
+/* Buttons */
+
+.btn {
+    padding: 15px 35px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(45deg, #ff35a4, #ffb32e);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 22px #ff39b9;
+    margin: 15px;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: scale(1.08);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* 3D Gift Box */
+
+.gift-scene {
+    perspective: 900px;
+    height: 250px;
+    width: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gift {
+    width: 150px;
+    height: 130px;
+    position: relative;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    animation: giftFloat 2s infinite alternate;
+}
+
+@keyframes giftFloat {
+    to { transform: translateY(-12px) rotateY(8deg); }
+}
+
+.gift-body {
+    position: absolute;
+    bottom: 0;
+    width: 150px;
+    height: 105px;
+    background: linear-gradient(90deg, #d40069, #ff65aa, #b60057);
+    border: 2px solid #ffb1d9;
+    box-shadow: 0 15px 30px #0007;
+}
+
+.gift-body::before {
+    content: "";
+    position: absolute;
+    left: 57px;
+    height: 100%;
+    width: 30px;
+    background: #ffe15a;
+}
+
+.gift-lid {
+    position: absolute;
+    top: 10px;
+    left: -10px;
+    width: 170px;
+    height: 35px;
+    background: linear-gradient(90deg, #ff298f, #ff8ac5);
+    border: 2px solid #ffd4ec;
+    z-index: 4;
+    transform-origin: left bottom;
+    transition: 1s;
+}
+
+.gift-lid::before {
+    content: "";
+    position: absolute;
+    left: 67px;
+    width: 30px;
+    height: 100%;
+    background: #ffe15a;
+}
+
+.gift.open .gift-lid {
+    transform: translateY(-75px) rotate(-30deg) translateX(-30px);
+}
+
+.bow {
+    position: absolute;
+    top: -22px;
+    left: 55px;
+    width: 45px;
+    height: 30px;
+    z-index: 6;
+    background: #ffe15a;
+    border-radius: 50% 0 50% 0;
+    transform: rotate(-20deg);
+}
+
+/* Birthday reveal */
+
+.birthday-text {
+    color: #ffe08c;
+    font-size: clamp(30px, 8vw, 47px);
+    font-weight: bold;
+    text-shadow: 0 0 20px #ff30bd;
+    margin: 20px 5px;
+    animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+    to { text-shadow: 0 0 35px #ff00b7; }
+}
+
+/* Urdu speech */
+
+.speech-box {
+    width: 100%;
+    max-width: 650px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid #ff9bd6;
+    padding: 25px 20px;
+    border-radius: 25px;
+    box-shadow: 0 0 30px #ff2da8;
+    margin: 15px auto;
+}
+
+.urdu {
+    direction: rtl;
+    font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq',
+                 'Noto Naskh Arabic', serif;
+    font-size: 21px;
+    line-height: 2.2;
+    color: #fff0fa;
+}
+
+#confetti {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+}
+
+.heart {
+    position: fixed;
+    bottom: -40px;
+    font-size: 22px;
+    animation: hearts 7s linear forwards;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes hearts {
+    to {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@media(max-width: 400px) {
+    .cake-scene {
+        transform: scale(.88);
+        margin: 0 auto;
+    }
+    .urdu {
+        font-size: 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="confetti"></canvas>
+
+<!-- SCREEN 1: CANDLES -->
+
+<section class="screen active" id="screen1">
+
+    <h1>🎂 Happy Birthday 🎂</h1>
+
+    <p class="subtitle">A Special Day For Someone Special ❤️</p>
+
+    <div class="date">12 December 2008 ✨</div>
+
+    <h2 style="color:#ffb5df">Make a Wish, Noor! 💗</h2>
+
+    <div class="cake-scene">
+
+        <div class="cake" id="cake">
+
+            <div class="cake-base"></div>
+            <div class="icing"></div>
+            <div class="cake-top"></div>
+
+            <div class="candle" onclick="blowCandle(this)">
+                <div class="flame"></div>
+            </div>
+
+            <div class="candle" onclick="blowCandle(this)">
+                <div class="flame"></div>
+            </div>
+
+            <div class="candle" onclick="blowCandle(this)">
+                <div class="flame"></div>
+            </div>
+
+            <div class="candle" onclick="blowCandle(this)">
+                <div class="flame"></div>
+            </div>
+
+            <div class="candle" onclick="blowCandle(this)">
+                <div class="flame"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <p class="cake-instruction" id="instruction">
+        🕯️ Click on all 5 candles to blow them out!
+    </p>
+
+    <button class="btn hidden" id="surpriseBtn"
+            onclick="goToGift()">
+        🎁 SURPRISE
+    </button>
+
+</section>
+
+
+<!-- SCREEN 2: GIFT BOX -->
+
+<section class="screen" id="screen2">
+
+    <h1>🎁 A Gift For Noor!</h1>
+
+    <p class="subtitle">Something special is waiting for you...</p>
+
+    <div class="gift-scene">
+        <div class="gift" id="gift" onclick="openGift()">
+
+            <div class="gift-body"></div>
+            <div class="gift-lid">
+                <div class="bow"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <p class="subtitle" id="giftInstruction">
+        ❤️ Click on the gift box to open it!
+    </p>
+
+    <div id="giftMessage" class="hidden">
+
+        <div class="birthday-text">
+            HAPPY BIRTHDAY BHAN! ❤️
+        </div>
+
+        <h2 style="color:#ffb9e6">
+            Dear Noor! 🌸
+        </h2>
+
+        <p class="subtitle">
+            May your life always shine with happiness!
+        </p>
+
+        <button class="btn" onclick="goToCake()">
+            🎂 See Your Cake
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- SCREEN 3: CUT THE CAKE -->
+
+<section class="screen" id="screen3">
+
+    <h1>🎂 Birthday Cake Time!</h1>
+
+    <div class="birthday-text">Happy Birthday Noor ❤️</div>
+
+    <div class="cake-scene">
+
+        <div class="cake" id="cutCake" onclick="cutCake()">
+            <div class="cake-base"></div>
+            <div class="icing"></div>
+            <div class="cake-top"></div>
+            <div class="slice"></div>
+        </div>
+
+    </div>
+
+    <p class="cake-instruction" id="cutInstruction">
+        🍰 Click on the cake to cut it!
+    </p>
+
+    <button class="btn hidden" id="nextBtn"
+            onclick="goToSpeech()">
+        NEXT ❤️
+    </button>
+
+</section>
+
+
+<!-- SCREEN 4: URDU BIRTHDAY SPEECH -->
+
+<section class="screen" id="screen4">
+
+    <h1>💖 A Special Message 💖</h1>
+
+    <div class="birthday-text">
+        Happy Birthday Noor!
+    </div>
+
+    <div class="speech-box">
+
+        <div class="urdu">
+
+            پیاری نور! ❤️
+
+            <br>
+
+            آج کا دن بہت خاص ہے، کیونکہ آج کے دن ایک بہت پیاری
+            اور خوبصورت انسان اس دنیا میں آئی تھی۔
+
+            <br><br>
+
+            نور! اللہ تعالیٰ تمہاری زندگی کو خوشیوں، محبتوں،
+            کامیابیوں اور سکون سے بھر دے۔
+
+            <br><br>
+
+            تمہاری ہر صبح نئی امید لے کر آئے، تمہاری ہر دعا قبول ہو،
+            تمہارے ہر خواب کو حقیقت کا روپ ملے اور تمہارے چہرے
+            پر مسکراہٹ ہمیشہ قائم رہے۔
+
+            <br><br>
+
+            اللہ تمہیں زندگی کے ہر امتحان میں کامیاب کرے،
+            تمہیں لمبی عمر، صحت، عزت اور بے شمار خوشیاں عطا فرمائے۔
+
+            <br><br>
+
+            تم ہمیشہ ایسے ہی مسکراتی رہو، کیونکہ تمہاری مسکراہٹ
+            بہت خوبصورت ہے۔ 🌸
+
+            <br><br>
+
+            <b>سالگرہ بہت بہت مبارک ہو نور! 🎂❤️</b>
+
+            <br><br>
+
+            دعا ہے کہ تمہاری زندگی کا آنے والا ہر سال
+            پہلے سے زیادہ خوبصورت ہو۔
+
+            <br><br>
+
+            <b>اللہ تمہیں ہمیشہ اپنی حفظ و امان میں رکھے۔ آمین! 🤲</b>
+
+        </div>
+
+    </div>
+
+    <div class="birthday-text">
+        Lots of Love Noor! ❤️
+    </div>
+
+    <p class="subtitle">
+        Made with love, just for you! 🎀
+    </p>
+
+    <button class="btn" onclick="celebrateAgain()">
+        🎉 Celebrate Again
+    </button>
+
+</section>
+
+
+<script>
+
+// SCREEN NAVIGATION
+
+function showScreen(id) {
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+    });
+
+    document.getElementById(id).classList.add("active");
+    window.scrollTo(0, 0);
+}
+
+
+// CANDLE FUNCTION
+
+let blownCandles = 0;
+
+function blowCandle(candle) {
+
+    if (candle.classList.contains("off")) return;
+
+    candle.classList.add("off");
+    blownCandles++;
+
+    document.getElementById("instruction").innerText =
+        "✨ " + blownCandles + " / 5 Candles Blown Out!";
+
+    startConfetti(35);
+
+    if (blownCandles === 5) {
+
+        document.getElementById("instruction").innerText =
+            "Wow! All candles are OFF! ❤️";
+
+        setTimeout(() => {
+            document.getElementById("surpriseBtn")
+                .classList.remove("hidden");
+
+            document.getElementById("surpriseBtn")
+                .scrollIntoView({behavior:"smooth", block:"center"});
+        }, 700);
+    }
+}
+
+
+// GIFT SCREEN
+
+function goToGift() {
+    showScreen("screen2");
+    startConfetti(150);
+}
+
+let giftOpened = false;
+
+function openGift() {
+
+    if (giftOpened) return;
+
+    giftOpened = true;
+
+    document.getElementById("gift").classList.add("open");
+
+    document.getElementById("giftInstruction").innerText =
+        "🎉 Your gift is opening...";
+
+    startConfetti(200);
+
+    setTimeout(() => {
+
+        document.getElementById("giftMessage")
+            .classList.remove("hidden");
+
+        document.getElementById("giftInstruction")
+            .innerText = "A special birthday wish for you! ❤️";
+
+    }, 1000);
+}
+
+
+// CAKE CUT SCREEN
+
+function goToCake() {
+    showScreen("screen3");
+    startConfetti(120);
+}
+
+let cakeCut = false;
+
+function cutCake() {
+
+    if (cakeCut) return;
+
+    cakeCut = true;
+
+    document.getElementById("cutCake")
+        .classList.add("cake-cut");
+
+    document.getElementById("cutInstruction")
+        .innerText = "🍰 Your birthday cake has been cut!";
+
+    startConfetti(200);
+
+    setTimeout(() => {
+        document.getElementById("nextBtn")
+            .classList.remove("hidden");
+    }, 1200);
+}
+
+
+// URDU SPEECH SCREEN
+
+function goToSpeech() {
+    showScreen("screen4");
+    startConfetti(250);
+}
+
+
+// CELEBRATE AGAIN
+
+function celebrateAgain() {
+
+    blownCandles = 0;
+    giftOpened = false;
+    cakeCut = false;
+
+    document.querySelectorAll(".candle").forEach(c => {
+        c.classList.remove("off");
+    });
+
+    document.getElementById("instruction").innerText =
+        "🕯️ Click on all 5 candles to blow them out!";
+
+    document.getElementById("surpriseBtn")
+        .classList.add("hidden");
+
+    document.getElementById("gift")
+        .classList.remove("open");
+
+    document.getElementById("giftMessage")
+        .classList.add("hidden");
+
+    document.getElementById("giftInstruction")
+        .innerText = "❤️ Click on the gift box to open it!";
+
+    document.getElementById("cutCake")
+        .classList.remove("cake-cut");
+
+    document.getElementById("cutInstruction")
+        .innerText = "🍰 Click on the cake to cut it!";
+
+    document.getElementById("nextBtn")
+        .classList.add("hidden");
+
+    showScreen("screen1");
+}
+
+
+// CONFETTI ANIMATION
+
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+
+let pieces = [];
+let confettiFrame = null;
+
+function resizeCanvas() {
+
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+function startConfetti(amount = 150) {
+
+    const colors = [
+        "#ff4da6", "#ffe66d", "#ffffff",
+        "#00ffff", "#c084fc", "#ff8c42"
+    ];
+
+    for (let i = 0; i < amount; i++) {
+
+        pieces.push({
+            x: Math.random() * window.innerWidth,
+            y: -Math.random() * window.innerHeight,
+            size: Math.random() * 8 + 3,
+            speed: Math.random() * 4 + 2,
+            drift: Math.random() * 3 - 1.5,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            rotation: Math.random() * 360
+        });
+    }
+
+    if (!confettiFrame) animateConfetti();
+}
+
+function animateConfetti() {
+
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+    pieces.forEach(p => {
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation * Math.PI / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+        ctx.restore();
+
+        p.y += p.speed;
+        p.x += p.drift;
+        p.rotation += 4;
+
+    });
+
+    pieces = pieces.filter(p => p.y < window.innerHeight + 20);
+
+    if (pieces.length > 0) {
+        confettiFrame = requestAnimationFrame(animateConfetti);
+    } else {
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        confettiFrame = null;
+    }
+}
+
+
+// FLOATING HEARTS
+
+function createHeart() {
+
+    const heart = document.createElement("div");
+
+    heart.className = "heart";
+    heart.innerHTML = Math.random() > 0.5 ? "❤️" : "💖";
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 8000);
+}
+
+setInterval(createHeart, 800);
+
+</script>
+
+</body>
+</html>
